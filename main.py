@@ -26,7 +26,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.command()
 async def execute(ctx, *, new_message):
-    if ctx.author.id == 1244365299181031527:
+    if ctx.author.id == 1244365299181031527 or ctx.author.id == 1124419341048361111:
         global message_text
         message_text = new_message
         await ctx.send('Executing...')
