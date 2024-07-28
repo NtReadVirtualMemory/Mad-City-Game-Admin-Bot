@@ -12,16 +12,6 @@ message_text = "return"
 def index():
     return message_text
 
-@app.route('/set_message', methods=['POST'])
-def set_message():
-    global message_text
-    new_message = request.json.get('message')
-    if new_message:
-        message_text = new_message
-        return jsonify({'success': True, 'message': 'Message updated successfully'})
-    else:
-        return jsonify({'success': False, 'message': 'No message provided'})
-
 def run():
     app.run(host='0.0.0.0', port=8080)
 
@@ -36,11 +26,14 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.command()
 async def execute(ctx, *, new_message):
-    global message_text
-    message_text = new_message
-    await ctx.send('Executing...')
-    time.sleep(1)
-    message_text = "return"
+    if ctx.author.id == AUTHORIZED_USER_ID:
+        global message_text
+        message_text = new_message
+        await ctx.send('Executing...')
+        time.sleep(1)
+        message_text = "return"
+    else:
+        await ctx.send('You do not have permission to use this command.')
 
 keep_alive()
 
